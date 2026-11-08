@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${title})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container narrow">
+    <a class="back-link" th:href="@{${backUrl}}">← Back to list</a>
+    <div class="page-heading form-heading">
+        <div>
+            <p class="eyebrow">UNIVERSITY RECORD</p>
+            <h1 th:text="${title}">New student</h1>
+            <p class="page-subtitle">Enter the details below and save the record.</p>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/layout :: messages}"></div>
+
+    <form th:action="@{${action}}" th:object="${form}" method="post" class="content-card form">
+        <div class="form-section-title">Personal information</div>
+        <div class="form-grid">
+            <label>First name
+                <input type="text" th:field="*{firstName}" placeholder="First name" required>
+                <span class="field-error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+            </label>
+            <label>Last name
+                <input type="text" th:field="*{lastName}" placeholder="Last name" required>
+                <span class="field-error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+            </label>
+        </div>
+
+        <label>Email <span class="muted">(optional)</span>
+            <input type="email" th:field="*{email}" placeholder="name@example.com">
+            <span class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+        </label>
+
+        <div th:if="${creating}" class="login-box">
+            <div class="form-section-title">Login details</div>
+            <label>Username
+                <input type="text" th:field="*{username}" placeholder="Choose a username" required>
+                <span class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+            </label>
+            <label>Password
+                <input type="password" th:field="*{password}" placeholder="Create a password" required>
+                <span class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            </label>
+        </div>
+
+        <div th:unless="${creating}" class="readonly-note">
+            Username: <strong th:text="*{username}">username</strong>
+            <input type="hidden" th:field="*{username}">
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn">Save record</button>
+            <a class="btn btn-outline-dark" th:href="@{${backUrl}}">Cancel</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

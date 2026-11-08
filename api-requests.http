@@ -1,0 +1,96 @@
+### REST API tests. Open this file in IntelliJ and click the green arrow next to a request.
+### Login for every request: HTTP Basic (username password)
+
+### 1. Admin: list admins (200)
+GET http://localhost:8080/api/admins
+Authorization: Basic admin admin123
+
+### 2. Admin: create a teacher (201)
+POST http://localhost:8080/api/teachers
+Authorization: Basic admin admin123
+Content-Type: application/json
+
+{
+  "firstName": "Kamal",
+  "lastName": "Hossain",
+  "email": "kamal@uni.edu",
+  "username": "kamal",
+  "password": "kamal123"
+}
+
+### 3. Admin: create a student (201)
+POST http://localhost:8080/api/students
+Authorization: Basic admin admin123
+Content-Type: application/json
+
+{
+  "firstName": "Nusrat",
+  "lastName": "Jahan",
+  "email": "nusrat@uni.edu",
+  "username": "nusrat",
+  "password": "nusrat123"
+}
+
+### 4. Admin: list teachers (200)
+GET http://localhost:8080/api/teachers
+Authorization: Basic admin admin123
+
+### 5. Teacher: list students (200)
+GET http://localhost:8080/api/students
+Authorization: Basic teacher1 teacher123
+
+### 6. Student: my own record (200)
+GET http://localhost:8080/api/students/me
+Authorization: Basic student1 student123
+
+### 7. Student: update my own record (200)
+PUT http://localhost:8080/api/students/1
+Authorization: Basic student1 student123
+Content-Type: application/json
+
+{
+  "firstName": "Rafi",
+  "lastName": "Ahmed",
+  "email": "rafi.new@uni.edu"
+}
+
+### 8. Student tries the admin list (403 Forbidden)
+GET http://localhost:8080/api/admins
+Authorization: Basic student1 student123
+
+### 9. Student tries to list all students (403 Forbidden)
+GET http://localhost:8080/api/students
+Authorization: Basic student1 student123
+
+### 10. Wrong password (401 Unauthorized)
+GET http://localhost:8080/api/admins
+Authorization: Basic admin wrongpassword
+
+### 11. Not found (404)
+GET http://localhost:8080/api/students/999
+Authorization: Basic admin admin123
+
+### 12. Invalid data (400 Bad Request)
+POST http://localhost:8080/api/students
+Authorization: Basic admin admin123
+Content-Type: application/json
+
+{
+  "firstName": "",
+  "lastName": "X",
+  "email": "not-an-email",
+  "username": "a",
+  "password": "1"
+}
+
+### 13. Username already taken (409 Conflict)
+POST http://localhost:8080/api/students
+Authorization: Basic admin admin123
+Content-Type: application/json
+
+{
+  "firstName": "Copy",
+  "lastName": "Student",
+  "username": "student1",
+  "password": "student123"
+}

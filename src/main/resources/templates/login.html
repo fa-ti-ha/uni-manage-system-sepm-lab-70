@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Sign in')}"></head>
+<body class="login-page">
+
+<main class="login-card">
+    <a class="brand login-brand" th:href="@{/login}">
+        <span class="brand-mark">U</span>
+        <span class="brand-copy">
+            <strong>Campus Desk</strong>
+            <small>University Management</small>
+        </span>
+    </a>
+
+    <div class="login-intro">
+        <p class="eyebrow">WELCOME BACK</p>
+        <h1>Sign in</h1>
+        <p class="muted">Enter your account details to continue.</p>
+    </div>
+
+    <p class="alert error" th:if="${param.error}">Wrong username or password. Please try again.</p>
+    <p class="alert success" th:if="${param.logout}">You have been logged out.</p>
+
+    <form th:action="@{/login}" method="post" class="form">
+        <label>Username
+            <input type="text" name="username" placeholder="Enter your username" required autofocus>
+        </label>
+        <label>Password
+            <input type="password" name="password" placeholder="Enter your password" required>
+        </label>
+        <button type="submit" class="btn btn-block">Sign in</button>
+    </form>
+
+    <details class="demo">
+        <summary>Demo accounts</summary>
+        <div class="demo-list">
+            <div><strong>Admin</strong><span>admin / admin123</span></div>
+            <div><strong>Teacher</strong><span>teacher1 / teacher123</span></div>
+            <div><strong>Student</strong><span>student1 / student123</span></div>
+        </div>
+    </details>
+</main>
+
+</body>
+</html>

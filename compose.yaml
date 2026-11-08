@@ -1,0 +1,35 @@
+services:
+  # Database. Started automatically by Spring Boot (Docker Compose Support) when you run the app from IntelliJ.
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: university
+      POSTGRES_USER: university
+      POSTGRES_PASSWORD: university123
+    ports:
+      - "5433:5432"   # host port 5433, so it never clashes with a PostgreSQL installed on your PC
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U university -d university"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # The application itself. Only starts with:  docker compose --profile app up --build
+  app:
+    build: .
+    profiles: ["app"]
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/university
+      SPRING_DATASOURCE_USERNAME: university
+      SPRING_DATASOURCE_PASSWORD: university123
+      SPRING_DOCKER_COMPOSE_ENABLED: "false"
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${title})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">ADMINISTRATION</p>
+            <h1 th:text="${title}">Students</h1>
+            <p class="page-subtitle">View, add and update university records.</p>
+        </div>
+        <a class="btn" th:href="@{${basePath + '/new'}}" th:text="'+ Add ' + ${singular}">+ Add</a>
+    </div>
+
+    <div th:replace="~{fragments/layout :: messages}"></div>
+
+    <section class="content-card">
+        <div class="table-heading">
+            <div>
+                <h2 th:text="'All ' + ${title}">All Students</h2>
+                <p class="muted" th:text="${#lists.size(people)} + ' records'">0 records</p>
+            </div>
+        </div>
+
+        <div class="empty-state" th:if="${#lists.isEmpty(people)}">
+            <div class="empty-icon">+</div>
+            <strong>No records yet</strong>
+            <p>Add the first <span th:text="${singular}">student</span> to get started.</p>
+            <a class="btn btn-small" th:href="@{${basePath + '/new'}}" th:text="'+ Add ' + ${singular}">Add</a>
+        </div>
+
+        <div class="table-wrap" th:unless="${#lists.isEmpty(people)}">
+            <table>
+                <thead>
+                <tr>
+                    <th class="id-col">ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th class="action-col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p : ${people}">
+                    <td class="id-col" th:text="${p.id()}">1</td>
+                    <td><strong class="person-name" th:text="${p.firstName() + ' ' + p.lastName()}">Full name</strong></td>
+                    <td th:text="${p.email() ?: '-'}">email</td>
+                    <td><code th:text="${p.username()}">username</code></td>
+                    <td class="actions">
+                        <a class="btn btn-soft btn-small" th:href="@{${basePath + '/' + p.id() + '/edit'}}">Edit</a>
+                        <form th:unless="${p.username() == #authentication.name}"
+                              th:action="@{${basePath + '/' + p.id() + '/delete'}}" method="post"
+                              onsubmit="return confirm('Delete this person and their login?');">
+                            <button type="submit" class="btn btn-delete btn-small">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>

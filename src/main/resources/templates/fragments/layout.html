@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f7fb">
+    <title th:text="${title} + ' | Campus Desk'">Campus Desk</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header th:fragment="header" class="topbar">
+    <div class="topbar-inner">
+        <a class="brand" th:href="@{/}">
+            <span class="brand-mark">U</span>
+            <span class="brand-copy">
+                <strong>Campus Desk</strong>
+                <small>University Management</small>
+            </span>
+        </a>
+
+        <nav class="main-nav" sec:authorize="isAuthenticated()">
+            <span sec:authorize="hasRole('ADMIN')" class="nav-group">
+                <a class="nav-link" th:href="@{/admin/students}">Students</a>
+                <a class="nav-link" th:href="@{/admin/teachers}">Teachers</a>
+                <a class="nav-link" th:href="@{/admin/admins}">Admins</a>
+            </span>
+            <a class="nav-link" sec:authorize="hasRole('TEACHER')" th:href="@{/teacher/profile}">My profile</a>
+            <a class="nav-link" sec:authorize="hasRole('STUDENT')" th:href="@{/student/profile}">My profile</a>
+        </nav>
+
+        <div class="account-area" sec:authorize="isAuthenticated()">
+            <span class="role-pill" sec:authorize="hasRole('ADMIN')">Admin</span>
+            <span class="role-pill" sec:authorize="hasRole('TEACHER')">Teacher</span>
+            <span class="role-pill" sec:authorize="hasRole('STUDENT')">Student</span>
+            <span class="account-name" sec:authentication="name">username</span>
+            <a class="password-link" th:href="@{/account/password}">Password</a>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn btn-outline btn-small">Log out</button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<div th:fragment="messages" class="messages">
+    <p class="alert success" th:if="${message}" th:text="${message}">Saved.</p>
+    <p class="alert error" th:if="${error}" th:text="${error}">Error.</p>
+</div>
+
+</body>
+</html>
